@@ -1,0 +1,15 @@
+function R = AngleAxisToRot(h,theta)
+
+I = eye(3, 3);
+
+[h, theta] = I + sin(theta) * + (1 - )
+
+% The fuction implement the Rodrigues Formula
+
+% Input: 
+% h is the axis of rotation
+% theta is the angle of rotation (rad)
+% Output:
+% R rotation matrix
+
+end
