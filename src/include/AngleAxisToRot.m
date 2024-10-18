@@ -3,7 +3,7 @@ function R = AngleAxisToRot(h,theta)
 % Identity matrix 3x3
 I = eye(3, 3);
 % Rodrigues Formula for angle axis to rotation
-R = I + sin(theta) * h + (1 - cos(theta)) * h * h;
+R = I + sin(theta) * h + (1 - cos(theta)) * h.^2;
 
 % Input: 
 % h is the axis of rotation
