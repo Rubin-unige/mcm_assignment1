@@ -1,0 +1,166 @@
+\section{Exercise 2 - Rotation Matrix to Angle-Axis} \label{P2}
+
+In this exercise, the conversion from a rotation matrix to its equivalent angle-axis representation is implemented. Given a rotation matrix \( R \), the angle of rotation \( \theta \) and the corresponding axis of rotation \( \mathbf{h} \) are determined.
+
+The angle-axis representation is derived from the rotation matrix using the following relationships:
+
+\begin{equation} \label{angle_axis}
+\theta = \cos^{-1} \left( \frac{\text{tr}(R) - 1}{2} \right)
+\end{equation}
+
+where \( \text{tr}(R) \) denotes the trace of the matrix \( R \). The axis of rotation \( \mathbf{h} \) is calculated using:
+
+\begin{equation} \label{axis}
+\mathbf{h} = \frac{1}{\sqrt{1 + R_{11} + R_{22} + R_{33}}} \begin{bmatrix}
+R_{32} - R_{23} \\
+R_{13} - R_{31} \\
+R_{21} - R_{12}
+\end{bmatrix}
+\end{equation}
+
+This method enables the orientation of a rotation to be expressed as a vector and an angle.
+
+\subsection{Q 2.1 - Implementation of Rotation Matrix to Angle-Axis Conversion}
+
+A MATLAB function, \texttt{RotToAngleAxis}, was implemented to convert a rotation matrix \( R \) into its angle-axis representation \( (\mathbf{h}, \theta) \). The function operates as follows:
+
+\begin{enumerate}
+    \item \textbf{Validation of Rotation Matrix:}
+    The input rotation matrix \( R \) is first verified as a valid rotation matrix through several checks:
+    \begin{itemize}
+        \item \textit{Size Check:} The dimensions of the matrix are confirmed to be \( 3 \times 3 \) by verifying both dimensions equal 3. If this condition is not met, an error is raised.
+        
+        \item \textit{Orthogonality Check:} The orthogonality of \( R \) is checked by computing the product \( R R^T \) and comparing it to the identity matrix \( I \). This step ensures that the rows (and columns) of \( R \) are orthonormal vectors.
+        
+        \item \textit{Determinant Check:} The determinant of the matrix is calculated, and it is verified to equal 1.
+    \end{itemize}
+
+    \item \textbf{Angle of Rotation:}
+    The angle \( \theta \) of rotation is then calculated from the trace of the rotation matrix using Equation~\ref{angle_axis}. This angle represents the amount of rotation about the axis \( \mathbf{h} \).
+
+    \item \textbf{Axis Vector Calculation:}
+    The axis of rotation \( \mathbf{h} \) is calculated from a skew-symmetric matrix \( \mathbf{K} \), derived from the rotation matrix \( R \). The skew-symmetric matrix is calculated using the following formula:
+    \begin{equation} \label{skew_symmetric}
+    \mathbf{K} = \frac{R - R^T}{2 \sin(\theta)}
+    \end{equation}
+    The corresponding vector is then extracted using the \texttt{vex} function, which converts the skew-symmetric matrix \( \mathbf{K} \) into a vector that represents the rotation axis. Specifically, the components from the matrix are extracted as follows:
+    
+    \begin{equation}
+    \mathbf{h} = \begin{bmatrix}
+    K_{32} \\
+    K_{13} \\
+    K_{21}
+    \end{bmatrix}
+    \end{equation}
+    
+    where \( K_{ij} \) denotes the element in the \( i \)-th row and \( j \)-th column of the matrix \( \mathbf{K} \). This results in a standard 3D vector format that represents the rotation axis.
+    
+    The axis vector \( \mathbf{h} \) is normalized to ensure it is a unit vector:
+    
+    \begin{equation}
+    \mathbf{h} = \frac{\mathbf{h}}{\|\mathbf{h}\|}
+    \end{equation}
+    
+    where \( \|\mathbf{h}\| \) represents the norm (magnitude) of the vector \( \mathbf{h} \).
+
+    \item \textbf{Output:}
+    Finally, the calculated axis vector \( \mathbf{h} \) and the angle \( \theta \) in radians are returned.
+\end{enumerate}
+
+\subsection{Q 2.2 - Test Case 1}
+The rotation matrix used in Test Case 1 is:
+\[
+R = 
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 0 & -1 \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+The output obtained from Test Case 1 is as follows:
+\begin{align*}
+\text{Rotation axis } (\mathbf{h}) &= 
+\begin{bmatrix}
+1 \\
+0 \\
+0
+\end{bmatrix} \\
+\text{Angle } (\theta) &= 1.5708 \text{ radians (or } 90^\circ\text{)}
+\end{align*}
+
+These results indicate that the rotation axis is aligned with the x-axis, and the angle of rotation is \( 90^\circ \). It is confirmed that the rotation represented by the matrix \( R \) corresponds to a \( 90^\circ \) rotation about the x-axis, which aligns with the properties of the given matrix.
+
+\subsection{Q 2.3 - Test Case 2}
+
+The rotation matrix used in Test Case 2 is:
+\[
+R = 
+\begin{bmatrix}
+0.5 & -\frac{\sqrt{3}}{2} & 0 \\
+\frac{\sqrt{3}}{2} & 0.5 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+The output obtained from Test Case 2 is as follows:
+\begin{align*}
+\text{Rotation axis } (\mathbf{h}) &= 
+\begin{bmatrix}
+0 \\
+0 \\
+1
+\end{bmatrix} \\
+\text{Angle } (\theta) &= 1.0472 \text{ radians (or } 60^\circ\text{)}
+\end{align*}
+
+These results indicate that the rotation axis is aligned with the z-axis, and the angle of rotation is \( 60^\circ \). It is confirmed that the rotation represented by the matrix \( R \) corresponds to a \( 60^\circ \) rotation about the z-axis, which aligns with the properties of the given matrix.
+
+\subsection{Q 2.4 - Test Case 3}
+
+The rotation matrix used in Test Case 3 is:
+\[
+R = 
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+The output obtained from Test Case 3 is as follows:
+\begin{align*}
+\text{Rotation axis } (\mathbf{h}) &= 
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix} \\
+\text{Angle } (\theta) &= 0 \text{ radians}
+\end{align*}
+
+These results show that the rotation axis is undefined because the input matrix represents the identity transformation, which corresponds to no rotation. The angle of rotation being \( 0 \) confirms that there is no change in orientation, consistent with the properties of the identity matrix.
+
+\subsection{Q 2.5 - Test Case 4}
+The rotation matrix used in Test Case 4 is:
+\[
+R = 
+\begin{bmatrix}
+-1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+The output obtained from Test Case 4 is as follows:
+\begin{align*}
+\text{Rotation axis } (\mathbf{h}) &= 
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix} \\
+\text{Angle } (\theta) &= 3.1416 \text{ radians (or } 180^\circ\text{)}
+\end{align*}
+
+These results indicate that the rotation axis is a zero vector, which suggests that the transformation represented by the matrix \( R \) corresponds to a reflection across the origin rather than a standard rotation about an axis. The angle of rotation is \( 180^\circ \), consistent with the properties of the matrix.

@@ -1,0 +1,123 @@
+\section{Exercise 3 - Euler Angles to Rotation Matrix} \label{P3}
+
+In this exercise, the conversion from Yaw-Pitch-Roll (YPR) angles to a rotation matrix is performed. The rotation matrix is calculated using individual rotation matrices for yaw, pitch, and roll, combined in sequence. The result is a \(3 \times 3\) rotation matrix that represents the orientation of an object in three-dimensional space based on the specified YPR angles.
+
+\subsection{Q 3.1 - Implementation of Yaw-Pitch-Roll to Rotation Matrix Conversion}
+
+The task is to compute the equivalent rotation matrix given Yaw-Pitch-Roll angles \((\psi, \theta, \phi)\). The MATLAB function is defined as:
+
+\begin{verbatim}
+function R = YPRToRot(psi, theta, phi)
+\end{verbatim}
+
+The function calculates the rotation matrix \( R \) based on the specified YPR angles by defining and combining individual rotation matrices.
+
+\begin{enumerate}
+    \item \textbf{Calculation of Individual Rotation Matrices:}
+    
+    The rotation matrices for yaw, pitch, and roll are derived as follows:
+
+    \begin{itemize}
+        \item \textit{Yaw Rotation (Z-axis):}
+        \begin{equation}
+        R_z(\psi) = 
+        \begin{bmatrix}
+        \cos(\psi) & -\sin(\psi) & 0 \\
+        \sin(\psi) & \cos(\psi) & 0 \\
+        0 & 0 & 1
+        \end{bmatrix}
+        \end{equation}
+        
+        \item \textit{Pitch Rotation (Y-axis):}
+        \begin{equation}
+        R_y(\theta) = 
+        \begin{bmatrix}
+        \cos(\theta) & 0 & \sin(\theta) \\
+        0 & 1 & 0 \\
+        -\sin(\theta) & 0 & \cos(\theta)
+        \end{bmatrix}
+        \end{equation}
+
+        \item \textit{Roll Rotation (X-axis):}
+        \begin{equation}
+        R_x(\phi) = 
+        \begin{bmatrix}
+        1 & 0 & 0 \\
+        0 & \cos(\phi) & -\sin(\phi) \\
+        0 & \sin(\phi) & \cos(\phi)
+        \end{bmatrix}
+        \end{equation}
+    \end{itemize}
+    
+    \item \textbf{Combination of Rotation Matrices:}
+    
+    The overall rotation matrix \( R \) is obtained by combining the rotation matrices in sequence:
+    \begin{equation}
+    R = R_z(\psi) \cdot R_y(\theta) \cdot R_x(\phi)
+    \end{equation}
+
+    \item \textbf{Output:}
+    
+    The rotation matrix \( R \), a \( 3 \times 3 \) matrix representing the combined rotation corresponding to the YPR angles, is returned by the function.
+    
+\end{enumerate}
+
+\subsection{Q 3.2 - Test Case 1}
+
+The rotation matrix obtained when Yaw \( \psi = 0 \), Pitch \( \theta = 0 \), and Roll \( \phi = \frac{\pi}{2} \) is:
+
+\[
+R = 
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 0 & -1 \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+The result indicates a 90° rotation about the X-axis, as determined by the Roll angle \(\phi = \frac{\pi}{2}\). This rotation matrix \( R \) displays a transformation where the Y and Z axes are rotated, with the Y-axis moved to the Z position and the Z-axis to the negative Y position. This confirms a counterclockwise 90° rotation in the YZ-plane, consistent with a rotation about the X-axis.
+
+\subsection{Q 3.3 - Test Case 2}
+
+The rotation matrix obtained when Yaw \( \psi = 60^\circ \), Pitch \( \theta = 0 \), and Roll \( \phi = 0 \) is:
+
+\[
+R = 
+\begin{bmatrix}
+0.5000 & -0.8660 & 0 \\
+0.8660 & 0.5000 & 0 \\
+0 & 0 & 1.0000
+\end{bmatrix}
+\]
+
+This rotation matrix \( R \) represents a \( 60^\circ \) rotation around the Z-axis, consistent with the specified Yaw angle \( \psi = 60^\circ \). The X-axis is rotated towards the Y-axis, and the Y-axis towards the X-axis, while the Z-axis remains unchanged. This transformation effectively rotates points in the XY-plane by \( 60^\circ \).
+
+\subsection{Q 3.4 - Test Case 3}
+
+The rotation matrix obtained when Yaw \( \psi = \frac{\pi}{3} \), Pitch \( \theta = \frac{\pi}{2} \), and Roll \( \phi = \frac{\pi}{4} \) is:
+
+\[
+R = 
+\begin{bmatrix}
+0.0000 & -0.2588 & 0.9659 \\
+0.0000 & 0.9659 & 0.2588 \\
+-1.0000 & 0.0000 & 0.0000
+\end{bmatrix}
+\]
+
+This matrix represents the cumulative effect of a 60° Yaw, a 90° Pitch, and a 45° Roll. The primary alignment of the transformation is along the Z-axis, with modifications to the X and Y axes. This rotation matrix demonstrates a significant tilt due to the Pitch rotation, resulting in an almost vertical position, with the Yaw slightly shifting it along the X-axis.
+
+\subsection{Q 3.5 - Test Case 4}
+
+The rotation matrix obtained when Yaw \( \psi = 0 \), Pitch \( \theta = \frac{\pi}{2} \), and Roll \( \phi = -\frac{\pi}{12} \) is:
+
+\[
+R = 
+\begin{bmatrix}
+0.0000 & -0.2588 & 0.9659 \\
+0 & 0.9659 & 0.2588 \\
+-1.0000 & 0.0000 & 0.0000
+\end{bmatrix}
+\]
+
+This matrix reflects the combined effect of the specified angles. The first row indicates minimal movement along the x-axis, with a negative contribution in the y-direction and a strong positive contribution in the z-direction. The second row shows a significant alignment along the y-axis due to the 90° Pitch rotation, while the third row’s negative x-axis value demonstrates substantial rotation in 3D space. This configuration captures the influence of the Yaw, Pitch, and Roll rotations on the object's orientation.

@@ -1,0 +1,111 @@
+\section{Exercise 4 - Rotation Matrix to Euler Angles} \label{P4}
+
+In this exercise, the conversion from a rotation matrix to equivalent Yaw-Pitch-Roll (YPR) angles is implemented. Yaw, pitch, and roll angles represent rotations around the z, y, and x axes, respectively. The relationship between the rotation matrix \( R \) and the YPR angles \( (\psi, \theta, \phi) \) is examined.
+
+\subsection{Q 4.1 - Implementation of Rotation Matrix to Yaw-Pitch-Roll Conversion}
+
+The MATLAB function \texttt{RotToYPR} is implemented to convert a given rotation matrix into the corresponding Euler angles using the Yaw-Pitch-Roll (YPR) convention. This function produces three outputs: yaw (\(\psi\)), pitch (\(\theta\)), and roll (\(\phi\)) angles. 
+
+\begin{enumerate}
+    \item \textbf{Input Validation:}
+    The function first verifies that the input \( R \) is a valid rotation matrix. This involves performing the following checks:
+        \begin{itemize}
+        \item \textit{Size Check:} Ensures that \( R \) is \( 3 \times 3 \) by verifying that both dimensions equal 3. If this condition is not met, an error is raised.
+        
+        \item \textit{Orthogonality Check:} Confirms that \( R \) is orthogonal by computing \( R R^T \) and comparing it to the identity matrix \( I \). This ensures that the rows (and columns) of \( R \) are orthonormal vectors.
+        
+        \item \textit{Determinant Check:} Checks that the determinant of \( R \) is 1, confirming it as a proper rotation matrix.
+    \end{itemize}
+
+    \item \textbf{Angle Calculation:}
+    After the input validation, the function calculates the Euler angles:
+    \begin{itemize}
+        \item The pitch angle \(\theta\) is calculated as:
+        \begin{equation}
+        \theta = -\arcsin(R_{13})
+        \end{equation}
+        where \( R_{13} \) is the element in the first row and third column of \( R \).
+
+        \item The yaw angle \(\psi\) and roll angle \(\phi\) are conditionally calculated based on the cosine of \(\theta\) to handle potential singularities:
+        \begin{itemize}
+            \item If \( \cos(\theta) > 1 \times 10^{-6} \) (indicating a non-singular case), yaw and roll are computed as:
+            \begin{equation}
+            \psi = \arctan2\left(\frac{R_{23}}{\cos(\theta)}, \frac{R_{33}}{\cos(\theta)}\right)
+            \end{equation}
+            \begin{equation}
+            \phi = \arctan2\left(\frac{R_{12}}{\cos(\theta)}, \frac{R_{11}}{\cos(\theta)}\right)
+            \end{equation}
+            where \( R_{23} \) and \( R_{33} \) are elements in the second and third rows of \( R \), respectively, for yaw, and \( R_{12} \) and \( R_{11} \) are elements in the first row for roll.
+
+            \item If \( \cos(\theta) \) is close to zero (indicating a singularity), yaw is set to 0 (as it becomes indeterminate), and roll is computed as:
+            \begin{equation}
+            \psi = 0
+            \end{equation}
+            \begin{equation}
+            \phi = \arctan2(R_{21}, R_{22})
+            \end{equation}
+            where \( R_{21} \) and \( R_{22} \) are elements in the rotation matrix. This approach maintains stability even in singular cases.
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Q 4.2 - Test Case 1 }
+
+In this test case, the rotation matrix is given as:
+\[
+R =
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 0 & -1 \\
+0 & 1 & 0
+\end{pmatrix}
+\]
+
+The calculated Yaw-Pitch-Roll (YPR) angles are:
+\begin{itemize}
+    \item Yaw (\(\psi\)): \(-1.5708\) radians
+    \item Pitch (\(\theta\)): \(0\) radians
+    \item Roll (\(\phi\)): \(0\) radians
+\end{itemize}
+
+The yaw angle of \(-1.5708\) radians indicates a 90-degree rotation to the left about the z-axis. The pitch and roll angles being zero signify that the object remains level along the y-axis and upright along the x-axis, respectively.
+
+\subsection{Q 4.3 - Test Case 2}
+
+In this test case, the rotation matrix is given as:
+\[
+R = \begin{pmatrix}
+\frac{1}{2} & -\frac{\sqrt{3}}{2} & 0 \\
+\frac{\sqrt{3}}{2} & \frac{1}{2} & 0 \\
+0 & 0 & 1
+\end{pmatrix}
+\]
+
+The calculated Yaw-Pitch-Roll (YPR) angles are:
+\begin{itemize}
+    \item Yaw (\(\psi\)): \(0\) radians
+    \item Pitch (\(\theta\)): \(0\) radians
+    \item Roll (\(\phi\)): \(-1.0472\) radians (which is equivalent to \(-\frac{\pi}{3}\))
+\end{itemize}
+
+The results indicate that the yaw and pitch angles are both zero, suggesting no rotation around these axes, while the roll angle of \(-1.0472\) radians represents a rotation of \(-\frac{\pi}{3}\) radians about the x-axis.
+
+\subsection{Q 4.4 - Test Case 3}
+
+In this test case, the rotation matrix is defined as:
+\[
+R = \begin{pmatrix}
+0 & -\frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} \\
+0.5 & \frac{\sqrt{6}}{4} & \frac{\sqrt{6}}{4} \\
+-\frac{\sqrt{3}}{2} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}
+\end{pmatrix}
+\]
+
+The calculated Yaw-Pitch-Roll (YPR) angles are:
+\begin{itemize}
+    \item Yaw (\(\psi\)): \(1.0472\) radians
+    \item Pitch (\(\theta\)): \(-0.7854\) radians
+    \item Roll (\(\phi\)): \(-1.5708\) radians
+\end{itemize}
+
+The yaw angle of \(1.0472\) radians indicates a rotation of approximately \(60^\circ\) around the z-axis, suggesting a rightward turn. The pitch angle of \(-0.7854\) radians corresponds to a downward tilt of about \(-45^\circ\), showing a descending rotation around the y-axis. The roll angle of \(-1.5708\) radians represents a clockwise rotation of approximately \(-90^\circ\) about the x-axis, indicating a significant tilt.

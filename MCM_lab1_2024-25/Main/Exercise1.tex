@@ -1,0 +1,100 @@
+\section{Exercise 1 - Angle-Axis to Rotation Matrix} \label{P1}
+In this exercise, the conversion from angle-axis representation to a rotation matrix is implemented using the Rodrigues formula, expressed as:
+
+\begin{equation} \label{rodrigues_formula}
+R(\mathbf{h}, \theta) = I_{3 \times 3} + [\mathbf{K}] \sin \theta + [\mathbf{K}]^2 (1 - \cos \theta)
+\end{equation}
+
+In this formula, \( R \) represents the rotation matrix, \( I_{3 \times 3} \) is the identity matrix, \( \theta \) denotes the angle of rotation, and \( [\mathbf{K}] \) is the skew-symmetric matrix derived from the axis of rotation \( \mathbf{h} \). This method allows the representation of a rotation in three-dimensional space using a given axis of rotation and angle.
+
+\subsection{Q 1.1 - Implementation of Angle-Axis to Rotation Matrix Conversion}
+
+A MATLAB function \texttt{AngleAxisToRot} was implemented to convert an angle-axis representation into a rotation matrix using the Rodrigues formula. The function accepts two inputs: the axis of rotation \( \mathbf{h} \) and the angle of rotation \( \theta \) in radians. The following steps are followed in the function:
+
+\begin{enumerate}
+    \item \textbf{Normalization of the Axis Vector:}
+    The input axis vector \( \mathbf{h} \) is normalized to ensure it has a unit length. This normalization is crucial because it preserves the direction of the axis while setting its magnitude to 1.
+
+    \item \textbf{Skew-Symmetric Matrix Construction:}
+    A skew-symmetric matrix \( [\mathbf{K}] \) is then constructed from the components of the normalized axis vector. This matrix is used in the Rodrigues formula to compute the rotation matrix:
+    \begin{equation}
+    [\mathbf{K}] = \begin{bmatrix}
+    0 & -h_3 & h_2 \\
+    h_3 & 0 & -h_1 \\
+    -h_2 & h_1 & 0
+    \end{bmatrix}
+    \end{equation}
+    
+    \item \textbf{Identity Matrix:}
+    The identity matrix \( I_{3 \times 3} \) (a 3x3 identity matrix) is created using the \texttt{eye(3)} function to serve as the foundation for the rotation matrix calculation.
+    
+    \item \textbf{Rotation Matrix Calculation:}  
+    Finally, the rotation matrix \( R \) is computed using the Rodrigues formula (Equation~\ref{rodrigues_formula}). This combines the identity matrix, the skew-symmetric matrix multiplied by the sine of the rotation angle, and the skew-symmetric matrix squared multiplied by \( (1 - \cos(\theta)) \). In MATLAB, this calculation is executed as:
+    \begin{verbatim}
+    R = I + sin(theta) * K + (1 - cos(theta)) * (K * K);
+    \end{verbatim}
+\end{enumerate}
+The complete function code can be found in Appendix A.
+
+\subsection{Q 1.2 -  Test Case 1}
+For the test case with axis \( \mathbf{h} = [1, 0, 0]^T \) and angle \( \theta = 90^\circ \) (or \( \theta = \frac{\pi}{2} \) radians), the rotation matrix obtained is as follows:
+
+\[
+R = \begin{bmatrix}
+1.0000 & 0 & 0 \\
+0 & 0.0000 & -1.0000 \\
+0 & 1.0000 & 0.0000
+\end{bmatrix}
+\]
+
+\begin{itemize}
+    \item The first row \([1.0000, 0, 0]\) confirms that the x-coordinate remains unchanged after the rotation.
+    \item The second row \([0, 0.0000, -1.0000]\) shows that the original y-axis rotates downward to align with the negative z-axis.
+    \item The third row \([0, 1.0000, 0.0000]\) indicates that the original z-axis moves upward to align with the positive y-axis.
+\end{itemize}
+
+This result demonstrates that points initially in the yz-plane are now positioned in the xz-plane with a 90-degree rotation about the x-axis.
+
+\subsection{Q 1.3 -  Test Case 2}
+For the test case with axis \( \mathbf{h} = [0, 0, 1]^T \) and angle \( \theta = \frac{\pi}{3} \) radians, the rotation matrix obtained is as follows:
+
+\[
+R = \begin{bmatrix}
+0.5000 & -0.8660 & 0 \\
+0.8660 & 0.5000 & 0 \\
+0 & 0 & 1.0000
+\end{bmatrix}
+\]
+
+\begin{itemize}
+    \item The third row \([0, 0, 1.0000]\) shows that the z-coordinate remains unchanged.
+    \item The first row \([0.5000, -0.8660, 0]\) shows that a point originally located on the x-axis now lies in the xy-plane, positioned at an angle of \( 60^\circ \) from the x-axis.
+    \item The second row \([0.8660, 0.5000, 0]\) indicates that a point initially on the y-axis rotates to align with the positive x-axis.
+\end{itemize}
+
+Thus, points initially in the xy-plane are now at a \( 60^\circ \) angle relative to the x-axis with the rotation about the z-axis.
+
+\subsection{Q 1.4 -  Test Case 3}
+For the test case with \(\rho = [-\frac{\pi}{3}, -\frac{\pi}{6}, \frac{\pi}{3}]\), the rotation matrix obtained is:
+
+\[
+R = \begin{bmatrix}
+0.4444 & -0.4444 & -0.7778 \\
+0.8889 & 0.1111 & 0.4444 \\
+-0.1111 & -0.8889 & 0.4444
+\end{bmatrix}
+\]
+
+In this case, the angle \(\theta\) and axis \(h\) were computed from \(\rho\) as follows:
+\begin{equation}
+\mathbf{h} = \frac{\rho}{\|\rho\|}, \quad \theta = \|\rho\|
+\end{equation}
+
+Here, \( \|\rho\| \) is the norm of \( \rho \).
+
+\begin{itemize}
+    \item The first row \([0.4444, -0.4444, -0.7778]\) shows how points originally along the x-axis are transformed, indicating a rotation influenced by both the x and y axes.
+    \item The second row \([0.8889, 0.1111, 0.4444]\) suggests that points initially aligned with the y-axis are rotated, primarily influenced by the positive x and z components.
+    \item The third row \([-0.1111, -0.8889, 0.4444]\) reveals how points on the z-axis are affected, indicating a rotation that pushes them towards the negative x-direction while being influenced positively along the y-direction.
+\end{itemize}
+

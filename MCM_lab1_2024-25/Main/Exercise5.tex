@@ -1,0 +1,81 @@
+\section{Exercise 5 - Frame tree} \label{P5}
+In this exercise, we compute the transformation matrices for the 7 joints of the Franka robot, as shown in Figure 1. The geometric definition of the transformation matrix is used for these calculations. 
+\subsection{Q 5.1: - Transformation matrix of frame \( 1 \) with respect to frame \( 0 \)}
+\[
+^{0}_{1}T = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & d_1 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.2: - Transformation matrix of frame \( 2 \) with respect to frame \( 1 \)}
+\[
+^{1}_{2}T = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & -1 & 0 \\
+        0 & 1 & 0 & d_2 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.3: - Transformation matrix of frame \( 3 \) with respect to frame \( 2 \)}
+\[
+^{2}_{3}T = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & d_3 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.4: - Transformation matrix of frame \( 4 \) with respect to frame \( 3 \)}
+\[
+^{3}_{4}T = \begin{pmatrix}
+        0 & 0 & 1 & 0 \\
+        0 & 1 & 0 & 0 \\
+        -1 & 0 & 0 & d_4 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.5: - Transformation matrix of frame \( 5 \) with respect to frame \( 4 \)}
+\[
+^{4}_{5}T = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & -1 & 0 & d_5 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.6: - Transformation matrix of frame \( 6 \) with respect to frame \( 5 \)}
+\[
+^{5}_{6}T = \begin{pmatrix}
+        0 & 0 & 1 & 0 \\
+        0 & 1 & 0 & 0 \\
+        -1 & 0 & 0 & d_6 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.7: - Transformation matrix of frame \( 7 \) with respect to frame \( 6 \)}
+\[
+^{6}_{7}T = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & -1 & 0 \\
+        0 & 1 & 0 & d_7 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
+
+\subsection{Q 5.8: - Transformation matrix of end effector \(e\) with respect to frame \( 7 \)}
+\[
+^{7}_{e}T = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & d_8 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\]
